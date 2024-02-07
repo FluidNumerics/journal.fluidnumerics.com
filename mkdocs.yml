@@ -14,13 +14,15 @@ docs_dir: docs
 nav:
   - Home: README.md
   - Working with hipBlas in Fortran: working-with-hipblas-in-fortran/README.md
-  - Contact Support: contact-us.md
+
 
 
 theme: 
   name: material
   favicon: assets/images/favicon.png
   logo: assets/images/logo.png
+  features:
+    - navigation.footer
   palette:
     - scheme: slate
       primary: black
@@ -46,3 +48,17 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
 
 plugins: []
+
+copyright: Copyright &copy; 2017 - 2024 Fluid Numerics LLC
+extra:
+  social:
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/@FluidNumerics
+    - icon: fontawesome/brands/reddit
+      link: https://www.reddit.com/r/FluidNumerics/
+    - icon: fontawesome/brands/github
+      link: https://github.com/fluidnumerics
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/fluidnumerics
+    - icon: fontawesome/brands/instagram 
+      link: https://www.instagram.com/fluidnumerics/
