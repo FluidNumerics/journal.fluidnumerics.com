@@ -1,0 +1,48 @@
+# Site Information
+site_name: Fluid Numerics RCC
+site_author: Fluid Numerics
+site_dir: public
+site_url: ""
+repo_name: GitHub/fluidnumerics/journal.fluidnumerics.com
+repo_url: https://github.com/fluidnumerics/journal.fluidnumerics.com
+edit_uri: edit/master/docs
+
+# Directory where site content is located
+docs_dir: docs
+
+# Site navigation 
+nav:
+  - Home: README.md
+  - Working with hipBlas in Fortran: working-with-hipblas-in-fortran/README.md
+  - Contact Support: contact-us.md
+
+
+theme: 
+  name: material
+  favicon: assets/images/favicon.png
+  logo: assets/images/logo.png
+  palette:
+    - scheme: slate
+      primary: black
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+         
+    - scheme: default 
+      primary: black
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+markdown_extensions:
+  - admonition
+  - pymdownx.arithmatex:
+      generic: true
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+plugins: []
