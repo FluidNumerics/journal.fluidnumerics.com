@@ -207,9 +207,40 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Home
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         Home
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hip-performance-comparisons-amd-and-nvidia-gpus" class="md-nav__link">
+    HIP Performance Comparisons : AMD and Nvidia GPUs
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -223,8 +254,38 @@
   
   
     <li class="md-nav__item">
-      <a href="working-with-hipblas-in-fortran/" class="md-nav__link">
-        Working with hipBlas in Fortran
+      <a href="fine-tuning-llama-3/" class="md-nav__link">
+        Fine Tuning LLAMA 3 on AMD GPUs
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="getting-started-with-llama3/" class="md-nav__link">
+        Getting started with LLAMA3 on AMD GPUs
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="hip-performance-comparisons-amd-and-nvidia-gpus/" class="md-nav__link">
+        HIP performance comparisons- AMD and Nvidia GPUs
       </a>
     </li>
   
@@ -250,6 +311,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hip-performance-comparisons-amd-and-nvidia-gpus" class="md-nav__link">
+    HIP Performance Comparisons : AMD and Nvidia GPUs
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -270,6 +346,9 @@
 
 <h1 id="fluid-numerics-journal">Fluid Numerics Journal</h1>
 <p><a href="https://www.fluidnumerics.com">Back to Fluid Numerics</a></p>
+<h2 id="hip-performance-comparisons-amd-and-nvidia-gpus"><a href="hip-performance-comparisons-amd-and-nvidia-gpus/">HIP Performance Comparisons : AMD and Nvidia GPUs</a></h2>
+<p><img align="left" alt="Spectral Element Mesh" src="hip-performance-comparisons-amd-and-nvidia-gpus/spectral-element-mesh.png" width="25%" /> 
+If you've read some of my other posts, you're aware I'm in the midst of refactoring and updating/upgrade SELF-Fluids. On the upgrade list, I'm planning a swap-out of the CUDA-Fortran implementation for HIP-Fortran, which will allow SELF-Fluids to run on both AMD and Nvidia GPU platforms. This journal entry details a portion of the work I've been doing to understand how some of the core routines in SELF-Fluids will perform across GPU platforms with HIP. <a href="hip-performance-comparisons-amd-and-nvidia-gpus/"><em>Read more</em></a></p>
 
 
 
@@ -291,13 +370,13 @@
       
       
         
-        <a href="working-with-hipblas-in-fortran/" class="md-footer__link md-footer__link--next" aria-label="Next: Working with hipBlas in Fortran" rel="next">
+        <a href="fine-tuning-llama-3/" class="md-footer__link md-footer__link--next" aria-label="Next: Fine Tuning LLAMA 3 on AMD GPUs" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Working with hipBlas in Fortran
+              Fine Tuning LLAMA 3 on AMD GPUs
             </div>
           </div>
           <div class="md-footer__button md-icon">

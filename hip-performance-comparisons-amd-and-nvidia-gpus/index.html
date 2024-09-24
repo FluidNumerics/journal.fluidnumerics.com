@@ -15,7 +15,7 @@
     
     
       
-        <title>Working with hipBlas in Fortran - Fluid Numerics RCC</title>
+        <title>HIP performance comparisons- AMD and Nvidia GPUs - Fluid Numerics RCC</title>
       
     
     
@@ -68,7 +68,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#working-with-hipblas-in-fortran" class="md-skip">
+        <a href="#hip-performance-comparisons-amd-and-nvidia-gpus" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Working with hipBlas in Fortran
+              HIP performance comparisons- AMD and Nvidia GPUs
             
           </span>
         </div>
@@ -241,11 +241,128 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../hip-performance-comparisons-amd-and-nvidia-gpus/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          HIP performance comparisons- AMD and Nvidia GPUs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         HIP performance comparisons- AMD and Nvidia GPUs
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-problem" class="md-nav__link">
+    Test Problem
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serial-code" class="md-nav__link">
+    Serial Code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cuda-kernel" class="md-nav__link">
+    CUDA Kernel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hip-kernel" class="md-nav__link">
+    HIP-Kernel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#platforms" class="md-nav__link">
+    Platforms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    Results
+  </a>
+  
+    <nav class="md-nav" aria-label="Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-time" class="md-nav__link">
+    Run-time
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#costs" class="md-nav__link">
+    Costs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    What's next ?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-resources" class="md-nav__link">
+    Related Resources:
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -270,6 +387,97 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-problem" class="md-nav__link">
+    Test Problem
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serial-code" class="md-nav__link">
+    Serial Code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cuda-kernel" class="md-nav__link">
+    CUDA Kernel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hip-kernel" class="md-nav__link">
+    HIP-Kernel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#platforms" class="md-nav__link">
+    Platforms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    Results
+  </a>
+  
+    <nav class="md-nav" aria-label="Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-time" class="md-nav__link">
+    Run-time
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#costs" class="md-nav__link">
+    Costs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    What's next ?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-resources" class="md-nav__link">
+    Related Resources:
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -282,13 +490,89 @@
                 
                   
 
-  <a href="https://github.com/fluidnumerics/journal.fluidnumerics.com/edit/master/docs/working-with-hipblas-in-fortran/README.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/fluidnumerics/journal.fluidnumerics.com/edit/master/docs/hip-performance-comparisons-amd-and-nvidia-gpus/README.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
-<h1 id="working-with-hipblas-in-fortran">Working with hipBlas in Fortran</h1>
+<h1 id="hip-performance-comparisons-amd-and-nvidia-gpus">HIP Performance Comparisons : AMD and Nvidia GPUs</h1>
+<h2 id="motivation">Motivation</h2>
+<p>If you've read some of my other posts, you're aware I'm in the midst of refactoring and updating/upgrade SELF-Fluids. On the upgrade list, I'm planning a swap-out of the CUDA-Fortran implementation for <a href="https://github.com/fluidnumerics/hip-fortran">HIP-Fortran</a>, which will allow SELF-Fluids to run on both AMD and Nvidia GPU platforms. 
+This journal entry details a portion of the work I've been doing to understand how some of the core routines in SELF-Fluids will perform across GPU platforms with HIP. While this work was actually done in the Spring 2019, the results still hold today for the <a href="https://github.com/fluidnumerics/hip-fortran">HIP-Fortran</a> implementation (Edit: Since writing this, AMD has taken over hip-fortran and released <a href="https://github.com/ROCm/hipfort">HIPFort</a> ).</p>
+<h2 id="test-problem">Test Problem</h2>
+<p><img align="center" alt="Spectral Element Mesh" src="spectral-element-mesh.png" width="60%" /></p>
+<p>For the test problem, I'm using an algorithm for the calculation of the divergence of vector function in 3-D space using a Spectral Element Collocation method. I'm choosing this as the test problem, since much of my current work is focused on a fluids solver based on a Spectral Element Method with similar computational patterns.</p>
+<p>In spectral element methods, a physical domain is described as a mesh of quadrilaterals in 2-D or hexahedrals in 3-D. The quads and hexes are called elements. Within each element, all functions are approximated by Lagrange interpolating polynomials, whose interpolation nodes a selected as special quadrature points that provide result in spectral convergence of discretization errors. </p>
+<p>When a function is approximated by a polynomial interpolant, a derivative (divergence, gradient, or curl) can approximated as the derivative of the interpolant. While there are some additional calculations that are required on the edges and faces of neighboring elements to complete the method, most of the compute time for calculating a divergence is spent on so-called internal operations.</p>
+<h2 id="serial-code">Serial Code</h2>
+<p>In general, the internal operations associated with calculating the divergence of a 3-D vector function looks something like code-block shown below. We loop over the elements in the outer most loop, then loop over the quadrature points in the next three loop levels. Within these quadruple-nested loop, we perform a reduction that consists of 3 multiply and 3 add operations.</p>
+<p>In this code-block, f is the 3-D vector function, df is the resulting divergence, and D is a spectral element derivative-matrix (derived from the derivative of Lagrange Interpolating Polynomials). The VEC_3D_INDEX  and 3D_INDEX are just a macros that "flatten" the multi-dimensional indices into a single index. For the problem I'm considering, there are 100 elements and N=7 (the polynomial degree of the interpolant).</p>
+<pre><code class="language-c++">for( iel=0; iel&lt;n_elements; iel++ ){
+  for( k=0; k&lt;N; k++ ){
+    for( j=0; j&lt;N; j++ ){
+      for( i=0; i&lt;N; i++ ){
+        df[SP_3D_INDEX(i,j,k,iel,N)] = 0.0;
+        for( ii=0; ii&lt;=N; ii++){
+          df[3D_INDEX(i,j,k,iel,N)]=df[3D_INDEX(i,j,k,iel,N)] +                   
+            D[INDEX(ii,i,N)]*f[VEC_3D_INDEX(0,ii,j,k,iel,N)] +               
+            D[INDEX(ii,j,N)]*f[VEC_3D_INDEX(1,i,ii,k,iel,N)] +               
+            D[INDEX(ii,k,N)]*f[VEC_3D_INDEX(2,i,j,ii,iel,N)] ;
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<h2 id="cuda-kernel">CUDA Kernel</h2>
+<p>When we write this kernel with CUDA, the element loop is replaced with a CUDA Block ID and the inner quadrature loops are broken out over CUDA threads within each block. Then, each CUDA thread does its own reduction in parallel.</p>
+<p>```c++
+int iel = blockidx.x;
+int i   = threadidx.x;
+int j   = threadidx.y;
+int k   = threadidx.z;</p>
+<p>df[SP_3D_INDEX(i,j,k,iel,N)] = 0.0;
+for( ii=0; ii&lt;=N; ii++){
+  df[3D_INDEX(i,j,k,iel,N)]=df[3D_INDEX(i,j,k,iel,N)] +                 <br />
+    D[INDEX(ii,i,N)]<em>f[VEC_3D_INDEX(0,ii,j,k,iel,N)] +             <br />
+    D[INDEX(ii,j,N)]</em>f[VEC_3D_INDEX(1,i,ii,k,iel,N)] +             <br />
+    D[INDEX(ii,k,N)]*f[VEC_3D_INDEX(2,i,j,ii,iel,N)] ;
+ }
+ ```</p>
+<h2 id="hip-kernel">HIP-Kernel</h2>
+<p>To generate the HIP-Kernel, I simply run the hipify script that comes with the ROCm installation. For this simple set of code, no additional work is needed.</p>
+<h2 id="platforms">Platforms</h2>
+<p>To compare kernel performance between AMD and Nvidia GPUs and between HIP and CUDA compilers, I'm using resources from <a href="https://www.gpueater.com/">GPUEater</a> and <a href="https://cloud.google.com">Google Cloud Platform</a>.</p>
+<p>GPUEater provided access to AMD Vega64 and Vega64 (Frontier Edition) GPUs. </p>
+<p>From Google Cloud Platform, I'm only considering the Nvidia Tesla P100 and Nvidia Tesla V100 GPUs.</p>
+<p>A summary of the cost per hour for each GPU from when this work was done (Spring 2019) is shown below.</p>
+<iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS8InvHcVyIxSOV0gaz9M9remlhTLmK83nyfVxr9_A_qv5N4RO__nBK4NaC2Mi6kdRJi9qJci9GT05o/pubchart?oid=435211077&amp;format=interactive"></iframe>
+
+<h2 id="results">Results</h2>
+<h3 id="run-time">Run-time</h3>
+<p>For all of the runs, I execute the divergence kernel 1,000 times on a mesh with 100 elements and polynomial degree 7. In this exercise, I compare the run-times of the following Kernel-Platform combinations
+* HIP Kernel + AMD Vega64 GPU
+* HIP Kernel + AMD Vega64 (Frontier Edition) GPU
+* HIP Kernel + Nvidia Tesla P100 GPU
+* CUDA Kernel + Nvidia Tesla P100 GPU
+* HIP Kernel + Nvidia Tesla V100 GPU
+* CUDA Kernel + Nvidia Tesla V100 GPU</p>
+<p>Notice that, on the Nvidia systems, the performance of the HIP and CUDA kernels are nearly identical, indicating there are no performance losses from the "hipification" process. This shouldn't be surprising, since, under the hood, the hipcc compiler will "un-hipify" HIP kernels and compile with nvcc.</p>
+<p>Of the GPUs compared, Nvidia's V100 comes in with the lowest run-time. </p>
+<iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS8InvHcVyIxSOV0gaz9M9remlhTLmK83nyfVxr9_A_qv5N4RO__nBK4NaC2Mi6kdRJi9qJci9GT05o/pubchart?oid=415273498&amp;format=interactive"></iframe>
+
+<h3 id="costs">Costs</h3>
+<p>With cloud computing becoming more prevalent for HPC and scientific computing, no platform comparison is complete without a cost comparison. In this case, the cost is a product of both the pricebooks of different cloud providers (GPUEater and Google Cloud Platform) and the actual runtime.</p>
+<p>For this particular kernel, we can see that the V100 provides enough speedup over the P100 GPUs to provide an overall cost reduction in the divergence calculation. However, the AMD Vega64 GPU comes in the least expensive, even though its performance is more on-par with Nvidia's P100 GPU. </p>
+<iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS8InvHcVyIxSOV0gaz9M9remlhTLmK83nyfVxr9_A_qv5N4RO__nBK4NaC2Mi6kdRJi9qJci9GT05o/pubchart?oid=1622572652&amp;format=interactive"></iframe>
+
+<h2 id="whats-next">What's next ?</h2>
+<p>With this bit of information, I'm now curious to understand why there are performance differences between the AMD and Nvidia GPUs.  Thinking about these results in the context of a Roofline performance model, the metrics to compare between the various GPUs are the memory bandwidth and floating point performance. Raw spec sheets provide some clues. </p>
+<p>For example, the Radeon Vega64 has a reported peak global memory bandwidth of 483.8 GB/s and peak single precision performance of 12.6 TFLOPs, while the <a href="https://images.nvidia.com/content/technologies/volta/pdf/volta-v100-datasheet-update-us-1165301-r5.pdf">Nvidia Tesla V100 comes in at 900 GB/s and 14 TFLOPs</a>. For the calculation we're doing, each reduction step carries out one store and seven load operations. With the reduction loop size of 8, this gives 13.1 MB of data to move for each divergence calculation. On the Nvidia V100, the achieved effective bandwidth is approximately  1.2 GB/s, suggesting we have some work to do to overcome memory bandwidth limitations. </p>
+<p>When just considering these two roofs and the results presented here, it is reasonable to think that the speedup on the V100 is related to its higher global memory bandwidth. Nonetheless, there are still other factors at play and a more detailed analysis of how this routine is utilizing the underlying hardware is needed.</p>
+<h2 id="related-resources">Related Resources:</h2>
+<p>Performance Portability Challenges for Fortran Applications</p>
+<p>https://sc18.supercomputing.org/proceedings/workshops/workshop_files/ws_p3hpc110s2-file1.pdf</p>
 
 
 
@@ -304,6 +588,27 @@
       </main>
       
         <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../getting-started-with-llama3/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Getting started with LLAMA3 on AMD GPUs" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Getting started with LLAMA3 on AMD GPUs
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
