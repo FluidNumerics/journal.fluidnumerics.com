@@ -62,7 +62,7 @@ Llama 3 likely needs no introduction, and it should be clear that this is the mo
 Special thanks to [Garrett Byrd](https://github.com/garrettbyrd) and [Dr. Joe Schoonover](https://github.com/fluidnumerics-joe) at [Fluid Numerics, LLC](https://www.fluidnumerics.com/) for contributing this blog. The ROCm software ecosystem is strengthened by community projects that enable you to use AMD GPUs in new ways. If you have a project you would like to share here, [please raise an issue or PR](https://github.com/ROCm/rocm-blogs).
 
 **Find Fluid Numerics online at:**
-- [fluidnumerics.com](www.fluidnumerics.com)
+- [fluidnumerics.com](https://www.fluidnumerics.com)
 - [Reddit](https://www.reddit.com/r/FluidNumerics/)
 - [GitHub](https://github.com/FluidNumerics)
 - [YouTube](https://www.youtube.com/@FluidNumerics)

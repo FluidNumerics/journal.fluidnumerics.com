@@ -13,7 +13,10 @@ docs_dir: docs
 # Site navigation 
 nav:
   - Home: README.md
-  - Working with hipBlas in Fortran: working-with-hipblas-in-fortran/README.md
+  - Fine Tuning LLAMA 3 on AMD GPUs: fine-tuning-llama-3/README.md
+  - Getting started with LLAMA3 on AMD GPUs: getting-started-with-llama3/README.md
+  - HIP performance comparisons- AMD and Nvidia GPUs: hip-performance-comparisons-amd-and-nvidia-gpus/README.md
+  #- Working with hipBlas in Fortran: working-with-hipblas-in-fortran/README.md
 
 
 
