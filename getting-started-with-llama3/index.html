@@ -1,0 +1,1419 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Fluid Numerics">
+      
+      
+      
+        <link rel="prev" href="../fine-tuning-llama-3/">
+      
+      
+        <link rel="next" href="../hip-performance-comparisons-amd-and-nvidia-gpus/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.6">
+    
+    
+      
+        <title>Getting started with LLAMA3 on AMD GPUs - Fluid Numerics Journal</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.35e1ed30.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#getting-started-with-llama-3-on-amd-instinct-and-radeon-gpus" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Fluid Numerics Journal" class="md-header__button md-logo" aria-label="Fluid Numerics Journal" data-md-component="logo">
+      
+  <img src="../assets/images/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Fluid Numerics Journal
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Getting started with LLAMA3 on AMD GPUs
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="cyan"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/fluidnumerics/journal.fluidnumerics.com" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub/fluidnumerics/journal.fluidnumerics.com
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Fluid Numerics Journal" class="md-nav__button md-logo" aria-label="Fluid Numerics Journal" data-md-component="logo">
+      
+  <img src="../assets/images/logo.png" alt="logo">
+
+    </a>
+    Fluid Numerics Journal
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/fluidnumerics/journal.fluidnumerics.com" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub/fluidnumerics/journal.fluidnumerics.com
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Blog Posts
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Blog Posts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../port-optimize-and-scale-with-hostaisle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Port, Optimize, and Scale on AMD Instinct GPUs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../saving-energy-on-quantum-chromodynamics-simulations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Saving Energy in Quantum Chromodynamics Simulations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../accelerating-science-with-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Accelerating Science with GPU software optimization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../what-is-a-mentored-sprint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    What is a mentored sprint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fine-tuning-llama-3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fine Tuning LLAMA 3 on AMD GPUs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Getting started with LLAMA3 on AMD GPUs
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Getting started with LLAMA3 on AMD GPUs
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source-code-and-presentation" class="md-nav__link">
+    Source code and Presentation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-an-llm" class="md-nav__link">
+    What is an LLM?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tokens" class="md-nav__link">
+    Tokens
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#embeddings" class="md-nav__link">
+    Embeddings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformer-models" class="md-nav__link">
+    Transformer Models
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+    <nav class="md-nav" aria-label="Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#system" class="md-nav__link">
+    System
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-312" class="md-nav__link">
+    Python (3.12+)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-steps" class="md-nav__link">
+    Install Steps
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hugging-face" class="md-nav__link">
+    Hugging Face
+  </a>
+  
+    <nav class="md-nav" aria-label="Hugging Face">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hugging-face-hub" class="md-nav__link">
+    Hugging Face Hub
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hugging-face-transformers-library" class="md-nav__link">
+    Hugging Face 🤗 Transformers Library
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llama-3" class="md-nav__link">
+    Llama 3
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#temperature" class="md-nav__link">
+    Temperature
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sampling-tokens" class="md-nav__link">
+    Sampling Tokens
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source-code" class="md-nav__link">
+    Source Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#papers" class="md-nav__link">
+    Papers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation-pages" class="md-nav__link">
+    Installation Pages
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#find-fluid-numerics-online-at" class="md-nav__link">
+    Find Fluid Numerics online at:
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hip-performance-comparisons-amd-and-nvidia-gpus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HIP performance comparisons- AMD and Nvidia GPUs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Mentored Sprint Reports
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Mentored Sprint Reports
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emprism-mentored-sprint-report/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EmPrism (Quantum Chromodynamics)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exess-mentored-sprint-report/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EXESS (Quantum Chemistry)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source-code-and-presentation" class="md-nav__link">
+    Source code and Presentation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-an-llm" class="md-nav__link">
+    What is an LLM?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tokens" class="md-nav__link">
+    Tokens
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#embeddings" class="md-nav__link">
+    Embeddings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformer-models" class="md-nav__link">
+    Transformer Models
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+    <nav class="md-nav" aria-label="Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#system" class="md-nav__link">
+    System
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-312" class="md-nav__link">
+    Python (3.12+)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-steps" class="md-nav__link">
+    Install Steps
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hugging-face" class="md-nav__link">
+    Hugging Face
+  </a>
+  
+    <nav class="md-nav" aria-label="Hugging Face">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hugging-face-hub" class="md-nav__link">
+    Hugging Face Hub
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hugging-face-transformers-library" class="md-nav__link">
+    Hugging Face 🤗 Transformers Library
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llama-3" class="md-nav__link">
+    Llama 3
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#temperature" class="md-nav__link">
+    Temperature
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sampling-tokens" class="md-nav__link">
+    Sampling Tokens
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source-code" class="md-nav__link">
+    Source Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#papers" class="md-nav__link">
+    Papers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation-pages" class="md-nav__link">
+    Installation Pages
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#find-fluid-numerics-online-at" class="md-nav__link">
+    Find Fluid Numerics online at:
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="getting-started-with-llama-3-on-amd-instinct-and-radeon-gpus">Getting Started with Llama 3 on AMD Instinct and Radeon GPUs</h1>
+<p><strong>September 09, 2024</strong></p>
+<p><strong>Authors : Garrett Byrd, Dr. Joe Schoonover</strong></p>
+<h2 id="introduction">Introduction</h2>
+<h3 id="source-code-and-presentation">Source code and Presentation</h3>
+<p>This blog is a companion piece to the <a href="https://www.youtube.com/watch?v=Y0HP86hMQko">ROCm Webinar of the same name</a> presented by Fluid Numerics, LLC on 11 July 2024. The source code for these materials is provided on <a href="https://github.com/FluidNumerics/amd-ml-examples">GitHub</a>.</p>
+<h3 id="what-is-an-llm">What is an LLM?</h3>
+<p>A <strong>large language model (LLM)</strong> is a natural language processing model that utilizes neural networks and machine learning (most notably, <strong>transformers</strong>) to execute language processing tasks. This is often in the form of some generative output, such as text, images, audio, and video. In this example, we will be discussing models whose input and output modalities are both text, and so it is sufficient to consider an LLM as a machine learning model that probabilistically predicts a sequence of words based on training data.</p>
+<p>Put simply, it's a robot you can have a conversation with.</p>
+<h3 id="tokens">Tokens</h3>
+<p>In the context of LLMs, a <strong>token</strong> is a small piece of information, often just a set of characters. (In practice, depending on the modality of a model, a token could also be a portion of an image, audio, video, etc.)</p>
+<p>Conceptually, it is fine to constrain tokens to words, punctuation, and tokenizer-specific symbols (e.g., the <strong>end of sequence token</strong>). Again, in reality, tokens are often chunks of words (say, from the English language), sometimes prepended by tokenizer-specific characters. These characters might indicate that a "sub-word" is a common suffix, such as "-ium", "-er", or "-ed". Sometimes tokens are not this intuitive, however.</p>
+<p>Below is a sample of 12 tokens taken from the Llama 3 model. We can discern ordinary English words, namely <code>Execute</code> and <code>film</code>, as well as some words prepended by single characters, those being <code>_Message</code>, <code>_lifetime</code>, <code>ĠWebsite</code>, and <code>ĠDeposit</code>. We also see a piece of punctuation, <code>.</code>, and the keen reader will also notice a bit of Java syntax, the <code>.getClass</code> method. Finally, we have the end of sequence token <code>&lt;|eot_id|&gt;</code>, and some others (<code>unun</code>, <code>heiten</code>, <code>andid</code>) which are not typical English words. Fortunately the user does not need to know the purpose of every single token in a model (Llama 3 comes packed with a whopping 128,256 distinct tokens).</p>
+<ul>
+<li><code>unun</code>  </li>
+<li><code>heiten</code>  </li>
+<li><code>andid</code>  </li>
+<li><code>Execute</code>  </li>
+<li><code>_Message</code>  </li>
+<li><code>.getClass</code>  </li>
+<li><code>_lifetime</code>  </li>
+<li><code>ĠWebsite</code>  </li>
+<li><code>.</code>  </li>
+<li><code>film</code>  </li>
+<li><code>ĠDeposit</code>  </li>
+<li><code>&lt;|eot_id|&gt;</code></li>
+</ul>
+<p>An LLM probabilistically predicts a sequence of tokens; in our simplified mental model, it guesses which word will come next in the sequence. Of course, it is not practical to simply set a limit on the number of words a model generates. Not every output would perfectly conform to, say, exactly 100 words. Instead, every model predicts the end of its output, just as it would any other word. As the name implies, this is the purpose of the end of sequence token. (Hypothetically, a model might be likely to predict the EOS token after the sequence "<code>and</code> <code>that's</code> <code>the</code> <code>end</code> <code>of</code> <code>the</code> <code>story</code> <code>.</code>") The EOS token is distinct for every model; even the Llama 2 and Llama 3 models do not share the same EOS token.</p>
+<h3 id="embeddings">Embeddings</h3>
+<p>GPUs are the critical hardware in the machine learning space. Under the hood, these are highly performant linear algebra machines, performing matrix multiply-adds and similar operations hundreds of trillions times per second (more or less, depending on the performance of a particular GPU). Clearly, GPUs are not doing these operations on strings. (Traditionally, there is not a useful definition for the sum or product of <code>hello world</code> and <code>good news, everyone</code>.) Instead, during the training process, LLMs produce vector representations of each token.</p>
+<p>An <strong>embedding</strong> is the representation of a token as an array. The weights and parameters of a transformers model are derived from the embeddings of its tokens. The matrix whose columns are the embeddings of every token in the model is the <strong>embedding matrix</strong>. The figure below provides a quick visual for embeddings.</p>
+<p><img alt="png" src="images/embedding.png" /></p>
+<p>Llama 3 embeddings have 4096 entries. A quick calculation implies that the embeddings alone account for 4096 × 128256 \= 525336576 parameters, though this \~0.5 billion is still only a fraction of the 8 billion total.</p>
+<p>The purpose of the parameter training process, of course, is to embed some kind of relative information into each token. As such, there are hidden dimensionalities utilizing these 4096 rows. To demonstrate this, a classical example is that the difference vector between the embeddings for <em>man</em> and <em>woman</em> is relatively close to the difference vector between the embeddings for <em>king</em> and <em>queen</em>. That is, there is some underlying dimension that could be associated with gender. One might hypothesize about qualities that may be dimensionalized in this way; perhaps <em>speed</em>, <em>elegance</em>, or <em>caffeination</em> have their own hidden dimensions in Llama 3.</p>
+<h3 id="transformer-models">Transformer Models</h3>
+<p>Providing a comprehensive explanation of the transformer model is far beyond the scope of this write-up; however, it is worth discussing the very basics.</p>
+<p>A transformer model accepts some kind of input (for our usage here, text), breaks this input down as a sequence of tokens (this is called <strong>tokenization</strong>), performs a series of deeper operations, and then probabilistically returns a token that will come next in this sequence. This process is repeated token-by-token until the end of sequence token is determined to come next; at this point, the model terminates the process and returns the sequence of tokens it has generated. These "deeper operations" include the <strong>encoding</strong> and <strong>decoding</strong> processes. A sufficient explanation for now is that encoding translates the input into tokens while also considering the relative positions of these tokens. Of course relative positions are significant; the sentences "Alice baked some chicken for dinner," is quite different from "some chicken baked Alice for dinner," despite the latter being a permutation of the former. This type of nuanced information is considered during the decoding, which relies on the trained parameters of the model. At the end of the decoding process, the model generates a vector whose entries correspond to each token in the model's vocabulary (for Llama 3, this vector would be of length 128256). This vector functions as a discrete probability distribution; each entry in this vector is the probability that its corresponding token will be selected to come next in the sequence.</p>
+<p>Of course, there are layers upon layers of normalizations, probabilistic selection, activation functions, and many other mechanisms going on, but the key takeaway is that tokens are expressed as vectors, and a vector is generated that stores the probabilities for which token will next be generated.</p>
+<h2 id="installation">Installation</h2>
+<h3 id="requirements">Requirements</h3>
+<p>The versions listed below are the versions tested for this example. Other versions may work, but this is not guaranteed.</p>
+<p><strong>Please reference the <a href="https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html">ROCm installation documentation</a> for compatible operating systems and hardware.</strong> Remember that <em>supported</em> indicates that a specific piece of software/hardware is tested and verified to work; ROCm may very well work on other systems, but functionality is not guaranteed.</p>
+<h4 id="system">System</h4>
+<ul>
+<li><a href="https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/quick-start.html">ROCm</a> (6.1)  </li>
+<li><a href="https://docs.anaconda.com/miniconda/">conda</a> (Anaconda3 or Miniconda3 24.1+)  </li>
+<li><a href="https://anaconda.org/anaconda/pip">pip</a> (24.0+)  </li>
+<li><a href="https://git-lfs.com/">git-lfs</a> (3.5+)</li>
+</ul>
+<h4 id="python-312">Python (3.12+)</h4>
+<ul>
+<li><a href="https://pytorch.org/get-started/locally/">PyTorch</a> (2.3.0 + rocm6.1)  </li>
+<li><a href="https://huggingface.co/docs/transformers/en/index">transformers</a> (4.41+)  </li>
+<li><a href="https://huggingface.co/docs/accelerate/en/index">accelerate</a> (0.30+)  </li>
+<li><a href="https://jupyterlab.readthedocs.io/en/stable/getting_started/installation.html">jupyterlab</a> (4.2.1) (optional)</li>
+</ul>
+<p>Naturally, we will need to install ROCm 6, as well as <code>conda</code> and <code>pip</code> for python environment management. <code>git-lfs</code> (Git Large File Storage) is required by the Hugging Face Hub (see next section) to download larger models/datasets. We will also need to install the version of PyTorch compatible with your version of ROCm. Fortunately, the PyTorch installation page provides a convenient configurator GUI to generate a command for the exact version you need. We will also need the <code>transformers</code> library developed and provided by Hugging Face, which provides the actual implementations for the models we can use, as well as the <code>accelerate</code> package, also provided by Hugging Face. <code>accelerate</code> generally removes some headache when working with GPUs; you can read a more in-depth description at the provided link.</p>
+<h3 id="install-steps">Install Steps</h3>
+<p>A complete install script is provided in the <a href="https://github.com/FluidNumerics/amd-ml-examples">accompanying repository</a> for this write-up, but we will go through the essential steps below.</p>
+<p>First, of course, we will need to install ROCm 6.1. See the <a href="https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/quick-start.html">quickstart install documentation</a> for the latest version. Below is the quickstart install procedure for Ubuntu 22.</p>
+<pre><code class="language-sh">sudo apt install &quot;linux-headers-$(uname -r)&quot; &quot;linux-modules-extra-$(uname -r)&quot;
+sudo usermod -a -G render,video $LOGNAME
+wget https://repo.radeon.com/amdgpu-install/6.1.1/ubuntu/jammy/amdgpu-install_6.1.60101-1_all.deb
+sudo apt install ./amdgpu-install_6.1.60101-1_all.deb
+sudo apt update
+sudo apt install amdgpu-dkms
+sudo apt install rocm
+echo &quot;Please reboot system for all settings to take effect.&quot;
+</code></pre>
+<p>Next, we install <code>miniconda3</code>, as instructed in the <a href="https://docs.anaconda.com/miniconda/">documentation</a>.</p>
+<pre><code class="language-sh">mkdir -p ~/miniconda3
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh   
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+rm -rf ~/miniconda3/miniconda.sh
+</code></pre>
+<p>We'll set up a simple conda environment with <code>pip</code> and <code>jupyterlab</code>.</p>
+<pre><code class="language-sh">conda create -n llama-3-env
+conda activate llama-3-env
+conda install pip
+pip install jupyterlab
+</code></pre>
+<p>Using the PyTorch install configurator, we get the following command for installing the ROCm 6.1 compatible version of PyTorch.</p>
+<pre><code class="language-sh">pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.1
+</code></pre>
+<p>Once this is installed, we are free to install <code>transformers</code> and <code>accelerate</code>. <strong>It is important to install the ROCm-compatible build of PyTorch first, otherwise</strong> <code>transformers</code> <strong>will install the default version as a dependency.</strong></p>
+<pre><code class="language-sh">pip install transformers accelerate
+</code></pre>
+<p>And finally, we may install <code>git-lfs</code>.</p>
+<pre><code class="language-sh">wget https://github.com/git-lfs/git-lfs/releases/download/v3.5.1/git-lfs-linux-amd64-v3.5.1.tar.gz
+tar -xzf git-lfs-linux-amd64-v3.5.1.tar.gz 
+cd git-lfs-3.5.1/
+sudo ./install.sh
+git lfs install
+</code></pre>
+<h2 id="hugging-face">Hugging Face</h2>
+<p><img alt="png" src="images/hf-logo-with-title.png" /></p>
+<p>At this point we have all of the software prerequisites covered. But how do we get a model to start experimenting with? How do we begin to choose one?</p>
+<h3 id="hugging-face-hub">Hugging Face Hub</h3>
+<p>The <a href="https://huggingface.co/models">Hugging Face Hub</a> is an online platform that provides open source and open weight models, datasets, and demo applications. The models offered here extend far beyond text-only LLMs; models for image detection, image segmentation, text-to-image, text-to-video, image-to-video, translation, and many other areas of applications are available.</p>
+<h3 id="hugging-face-transformers-library">Hugging Face 🤗 Transformers Library</h3>
+<p>We've gone through the appropriate install steps to get the <code>transformers</code> library, but what does it actually do? As alluded to above, the <code>transformers</code> library provides a robust Python API for all the major tensor libraries (PyTorch, TensorFlow, JAX) to utilize transformer models. The library provides a variety of other relevant tooling, even including REST endpoints. Perhaps one of its strongest features is its seamless integration with the Hugging Face Hub, providing a simple interface for the plethora of models, datasets, etc. hosted by Hugging Face.</p>
+<h2 id="llama-3">Llama 3</h2>
+<p>Llama 3 likely needs no introduction, and it should be clear that this is the model that we're using in this example. The Llama family, developed by Meta Platforms, Inc., is a collection of some of the most popular open-weight models available today. Meta offers 8 billion, 70 billion, and now even 405 billion parameter versions. Llama 3 was trained with 15 trillion tokens, and can digest an impressive 8K tokens. Llama 3 also achieves consistently high scores on a variety of LLM benchmarks, such as MMLU, HumanEval, and GSM8K. At the time of publication, the Llama family has approximately 15 million downloads on the Hugging Face Hub. Today, we'll be using the <code>Llama-3-8B-Instruct</code> version, an 8 billion parameter version that has been fine-tuned for instructional speech patterns, i.e., answering questions.</p>
+<h2 id="example">Example</h2>
+<p>Now that all the preliminary materials have been covered, it's time to run Llama 3.</p>
+<p>First, as usual, we import the necessary libraries.</p>
+<pre><code class="language-py">import transformers
+import torch
+</code></pre>
+<p>It is practical to start off with a check to make sure our GPU is actually the device being used. The line below outputs the name of your GPU; if you are using multiple GPUs, the global GPU indices can be found with <code>rocm-smi</code>.</p>
+<pre><code class="language-py">print(f&quot;Device name: {torch.cuda.get_device_name(0)}&quot;)
+</code></pre>
+<p>An example output here is: <code>Device name: AMD Instinct MI210</code></p>
+<p>You may be wondering why we specify <code>torch.cuda</code> if we are clearly using ROCm as our backend. The answer is <em>portability</em>. Pre-existing PyTorch code designed for <code>cuda</code> can typically be dropped into a ROCm ecosystem and retain functionality, accounting for different hardware specifications (e.g., amount of memory).</p>
+<p>The <code>transformers</code> library provides incredible ease of use when selecting models. If you don't have a model installed, you can simply specify the profile and model name and <code>transformers</code> will download it during execution time. (Once a model is downloaded, <code>transformers</code> references that local download and will not reinstall it every time the script is run.)</p>
+<pre><code class="language-py">model_name = &quot;meta-llama/llama-3-8b-instruct&quot;
+</code></pre>
+<p>You can also <code>git clone</code> a model, e.g.:</p>
+<pre><code class="language-sh">git clone https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct
+</code></pre>
+<p>Users have reportedly issues while cloning via SSH, so we recommend sticking with HTTPS. it is also worth mentioning that you will need to request permission from Meta to use the model, but the response time on this is typically just a few minutes. Once a model is cloned, you can just use the global path to that model instead of the <code>profile/model</code> syntax. (E.g., <code>model_name = "~/path/to/model"</code>.)</p>
+<p>Since we checked that PyTorch detects the GPU, we'll set the device to that "<code>cuda</code>" device.</p>
+<pre><code class="language-py">device = torch.device(&quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+print(f&quot;Device: {device}&quot;)
+</code></pre>
+<p>Our print statement here confirms that a cuda device is being used: <code>Device: cuda</code> </p>
+<p>AutoTokenizer is a generic tokenizer class that will be instantiated as one of the tokenizer classes of the library when created with the <code>AutoTokenizer.from_pretrained</code> class method. More information on this class can be found <a href="https://huggingface.co/transformers/v3.0.2/model_doc/auto.html#transformers.AutoTokenizer">here</a>. Functionally, we are telling <code>transformers</code> to use the Llama 3 tokenizer.</p>
+<pre><code class="language-py">tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
+</code></pre>
+<p>The <code>pipeline</code> class is the beating heart of this example. A pipeline tokenizes the input, feeds it to the model, and generates output. More information can be found <a href="https://huggingface.co/docs/transformers/en/main_classes/pipelines">here</a>.</p>
+<p>We are seeking a traditional text-in-text-out model, so we specify <code>"text-generation"</code> as the task. We point it to Llama 3 by specifying <code>model_name</code>, and we (somewhat arbitrarily) set the datatype to half precision (<code>float16</code>). Though there are certainly exceptions to this rule, lower precision operations can imply better generation time. Finally, we set <code>device_map="auto"</code>, which automatically grabs the GPU.</p>
+<pre><code class="language-py">pipeline = transformers.pipeline(
+    &quot;text-generation&quot;,          # What type of model are we running?
+    model=model_name,           # path to local model
+    torch_dtype=torch.float16,  # set precision of tensors used by the model
+    device_map=&quot;auto&quot;,          # uses the 'accelerate' package
+
+)
+</code></pre>
+<p>You may see the "special tokens" warning below; this is expected. You can also see that the model is being loaded into memory with a progress bar.</p>
+<pre><code>Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+
+Loading checkpoint shards: [progress bar]
+</code></pre>
+<p>Onto the fun part. Here's an example prompt. We'll use <code>pipeline</code>, which we defined above, to generate a response.</p>
+<pre><code class="language-py">prompt = 'I like listening to Snarky Puppy and Frank Zappa. What are some other musicians I might like?\n'
+
+sequences = pipeline(
+    text_inputs=prompt,
+    do_sample=True,
+    top_k=10,
+    num_return_sequences=1,
+    eos_token_id=tokenizer.eos_token_id,
+)
+</code></pre>
+<p>Let's go through the parameters one-by-one.</p>
+<p><strong><code>text_inputs</code>:</strong> Intuitive enough, the input text or "prompt" that the model will use to generate a sequence of tokens.</p>
+<p><strong><code>do_sample</code>:</strong> Recall that the attention mechanism of a transformer model calculates a discrete probability distribution and then samples this distribution to probabilistically select the next token in a sequence. This has nice generalized functionality, but we often do not wish to consider tokens that have low likelihoods of being selected. Instead, we sample from a pool of <em>k</em> tokens with the highest probabilities. This is the functionality gained by setting <code>do_sample=True</code>. If we set <code>do_sample=False</code>, then the model would simply select the token with the highest probability every time. This method is called <strong>greedy selection</strong>.</p>
+<p><strong><code>top_k</code>:</strong> This parameter simply specifies how many tokens to consider when using the above sampling method. We arbitrarily set this to <code>10</code>.</p>
+<p><strong><code>return_sequences</code>:</strong> If you want your model to generate multiple distinct responses to a single prompt, <code>return_sequences</code> specifies how many to generate. For our purposes, we just want the single response, so we set this to <code>1</code>.</p>
+<p><strong><code>eos_token_id</code>:</strong> Informs the model of the EOS token ID. Again, this is distinct for every model, so if it is not specified, the model will not properly generate end of sequence tokens. It is easy to get this via <code>tokenizer.eos_token_id</code>.</p>
+<p>For more information regarding sequence generation, reference the <a href="https://huggingface.co/docs/transformers/en/internal/generation_utils">documentation</a>.</p>
+<p>Finally, we print our response. <code>sequences</code> is a list of dictionaries, thus the <code>for</code> loop, which generalizes for <code>return_sequences &gt; 1</code>.</p>
+<pre><code class="language-py">for seq in sequences:
+    print(f&quot;\nResult:\n{seq['generated_text']}&quot;)
+</code></pre>
+<p>Example output:</p>
+<pre><code>Result:
+I like listening to Snarky Puppy and Frank Zappa. What are some other musicians I might like?
+Snarky Puppy is a great band! If you like their unique blend of jazz, rock, and world music, you might also enjoy the following musicians:
+
+1. Kamasi Washington - Like Snarky Puppy, Kamasi Washington is a saxophonist who blends jazz, rock, and hip-hop to create a unique sound.
+2. Tigran Hamasyan - An Armenian-American pianist, Tigran Hamasyan is known for his eclectic and energetic music, which combines elements of jazz, rock, and Armenian folk music.
+3. Brad Mehldau - A jazz pianist and composer, Brad Mehldau is known for his introspective and emotive playing style, which often incorporates elements of rock and pop music.
+4. Medeski, Martin &amp; Wood - This jazz trio is known for their energetic and improvisational live performances, which often blend elements of rock, funk, and world music.
+5. The Bad Plus - A jazz trio from Minneapolis, The Bad Plus is known for their eclectic and humorous approach to jazz, which often incorporates elements of rock and pop music.
+6. Christian Scott aTunde Adjuah - A trumpeter and producer, Christian Scott aTunde Adjuah is known for his genre-bending music, which combines elements of jazz, rock, and hip-hop.
+7. Robert Glasper - A pianist and producer, Robert Glasper is known for his work in the jazz and R&amp;B genres, and has collaborated with a wide range of artists, from Kendrick Lamar to Norah Jones.
+8. Esperanza Spalding - A bassist and singer, Esperanza Spalding is known for her eclectic and energetic music, which combines elements of jazz, rock, and pop.
+9. The Marsalis Family - A family of jazz musicians, the Marsalis family is known for their traditional and modern approach to jazz, which often incorporates elements of rock and pop music.
+10. Vijay Iyer - A pianist and composer, Vijay Iyer is known for his eclectic and energetic music, which combines elements of jazz, rock, and hip-hop.
+
+As for Frank Zappa, if you like his unique blend of rock, jazz, and classical music, you might also enjoy the following musicians:
+
+1. Frank Zappa's son, Dweezil Zappa - Dweezil has continued his father's legacy, playing Zappa's music and also creating his own unique blend of rock, jazz, and classical music.
+2. Steve Vai - A guitarist and composer, Steve Vai is known for his eclectic and virtuosic playing style, which combines elements of rock, jazz, and classical music.
+3. Joe Satriani - A guitarist and composer, Joe Satriani is known for his instrumental rock music, which often incorporates elements of jazz and classical music.
+4. Adrian Belew - A guitarist and singer, Adrian Belew is known for his work with Frank Zappa, as well as his own eclectic and experimental music, which combines elements of rock, jazz, and classical music.
+5. Mike Keneally - A guitarist and composer, Mike Keneally is known for his work with Frank Zappa, as well as his own eclectic and experimental music, which combines elements of rock, jazz, and classical music.
+6. Trey Gunn - A bassist and composer, Trey Gunn is known for his work with King Crimson, as well as his own eclectic and experimental music, which combines elements of rock, jazz, and classical music.
+7. Robert Fripp - A guitarist and composer, Robert Fripp is known for his work with King Crimson, as well as his own eclectic and experimental music, which combines elements of rock, jazz, and classical music.
+8. John Zorn - A saxophonist and composer, John Zorn is known for his eclectic and experimental music, which combines elements of jazz, rock, and classical music.
+9. Bill Frisell - A guitarist and composer, Bill Frisell is known for his eclectic and experimental music, which combines elements of jazz, rock, and classical music.
+10. Pat Metheny - A guitarist and composer, Pat Metheny is known for his eclectic and experimental music, which combines elements of jazz, rock, and classical music.
+
+I hope you find some new music to enjoy!
+</code></pre>
+<p>Regardless of taste, this response demonstrates precisely the behavior that we seek in an introductory level example. (Subjectively, we should also note that these recommendations are quite spot-on.) The response is in clear English, and provides context to each artist mentioned. <code>transformers</code> also provides functionality to return one token at a time instead of as a single string.</p>
+<p>Notice that the response begins with the string that we provided as the prompt. We emphasize again that these types of models generate tokens using pre-existing information. That is, further generating a sequence of tokens from a sequence that is provided, and the model is simply returning the initial sequence of tokens (the prompt) as well as the sequence of generated tokens (the response).</p>
+<h2 id="temperature">Temperature</h2>
+<p>Adjusting the sampling behavior via <code>do_sample</code> and <code>top_k</code> is merely a drop in the ocean of available methods to tweak the inner-workings of a model. Another drop is the concept of <strong>temperature</strong> in models. Recall once more that a transformer returns a vector of probabilities corresponding to each token in the model's vocabulary. These probability derive from a prior calculation, which provides a kind of "relative likelihood" for each possible token. These values could be any real number; an unlikely token could correspond to a negative value with a magnitude much greater than zero, while a likely token could correspond to a positive value with a comparable magnitude. Of course, we could not use this "pre-distribution" vector for sampling, since it interrupts two key requirements for a probability distribution:</p>
+<ol>
+<li>All probabilities must be positive.  </li>
+<li>The sum of the probabilities of all outcomes equals 1</li>
+</ol>
+<p>To transform this information into a useful form (into a probability distribution), we apply the <strong>softmax</strong> function.</p>
+<p><span class="arithmatex">\(\begin{align}
+  \Huge\text{softmax}(x_i, T) = \frac{\exp(x_i/T)}{\sum_{n=1}^{N}\exp(x_n/T)}
+\end{align}\)</span></p>
+<p>In this formula, consider <span class="arithmatex">\(x\_i\)</span> to be entries in our "relative likelihood" vector, and <span class="arithmatex">\(T\)</span> to be the temperature.</p>
+<p>Temperature is set to <code>1</code> by default; this is sensible, since it is functionally a scaling factor. A quick mental exercise verifies that the exponential function approaches zero as <span class="arithmatex">\(x\_i\)</span> approaches negative infinity, and approaches infinity as <span class="arithmatex">\(x\_i\)</span> approaches infinity. This solves our first requirement, and another quick exercise verifies that the denominator of this function guarantees that the entries of this new vector indeed sum to 1.</p>
+<p>Conceptually, temperature should be thought of as inversely affecting the certainty of a model. That is, a high temperature makes a model quite uncertain while a low temperature invokes greater certainty per token selection. What this means computationally is that, with a lower temperature, tokens which are likely to come next in the generated sequence become even more likely to be selected. With a high temperature, a likely token does not necessarily become "unlikely", but becomes less likely overall, as we will see.</p>
+<p>One can verify that as <span class="arithmatex">\(T\)</span> approaches zero, the vector approaches zero for all entries except the entry whose probability is greatest when <span class="arithmatex">\(T=1\)</span>. Instead, the probability of this outcome becomes 1; this is effectively the same as the greedy selection algorithm discussed earlier. As <span class="arithmatex">\(T\)</span> approaches infinity, we find that the resultant probability distribution becomes uniform, with each entry approaching a value of 1 / (vocabulary size).</p>
+<p>The script below iterates the temperature from 0.1 to 10, providing example responses for each value. We also pass <code>max_new_tokens=200</code> since, as we will discuss, some higher temperature responses can be quite rambly.</p>
+<pre><code class="language-py">for i in range(-2,3):
+    temp = 10.0**(i/2)
+    sequences = pipeline(
+        'What is two plus two?',
+        max_new_tokens=200,
+        do_sample=True,
+        top_k=10,
+        num_return_sequences=1,
+        eos_token_id=tokenizer.eos_token_id,
+        temperature=temp
+    )
+
+    print(f&quot;\n-------- temperature = {temp}&quot;)
+    for seq in sequences:
+        print(f&quot;\nResult:\n{seq['generated_text']}&quot;)
+</code></pre>
+<p>For the sake of brevity, we provide only an example output for the case <code>temp = 10</code>.</p>
+<pre><code>Result:
+What is two plus two?&quot;).  It's as straightforward and as simple and
+as direct. And that makes you feel, in fact that is a good example.
+
+And it's funny how this is, this, you have the, what I was saying the, I
+donít know why this was the best part was. This, I have, uh, in fact, uh... 
+
+(He seems to be losing momentum again.  He starts again more quickly
+this second attempt, as you've seen him do a time or time before. This,
+uh...) I think the, it, you can just tell how it works because of how simple and how straightforward and
+how it's so obvious that that makes you... uh, makes me. (Pausing)
+And uh. (Another pause, then) Oh, sorry!
+
+And it is that the reason this works for some things. And the reason that this
+kinda works, um is uh (he takes an audible breath)... it
+just
+</code></pre>
+<p>We encourage you to try this code block for yourself, varying <code>temperature</code> and <code>max_new_tokens</code> to get a feel for how temperature affects the model's behavior. As we can tell from this example, the <code>temperature</code> parameter can have quite drastic effects on a model's output. This response is incoherent. One could even imagine that in the context of a personified interface for this model, this kind of result could convey significant discomfort.</p>
+<h2 id="sampling-tokens">Sampling Tokens</h2>
+<p>Earlier we provided a sample of 12 tokens from the Llama 3 vocabulary. This section serves as a quick appendix to show how to replicate the sampling process.</p>
+<p>Again, we import the necessary packages.</p>
+<pre><code class="language-py">import transformers
+import torch
+import random
+</code></pre>
+<p>Similarly, we tell PyTorch to use an available <code>cuda</code> device.</p>
+<pre><code class="language-py">device = torch.device(&quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+</code></pre>
+<p>If you wish, you can do the same kinds of checks in the earlier example.</p>
+<pre><code class="language-py">print(f&quot;Device name: {torch.cuda.get_device_name(0)}&quot;)
+print(device)
+</code></pre>
+<p>And again, we specify the model we wish to use.</p>
+<pre><code class="language-py">model_name = &quot;meta-llama/llama-3-8b-instruct&quot;
+</code></pre>
+<p>And yet again, we set <code>tokenizer</code> to the Llama 3 tokenizer from our local model, and we build the pipeline just as we had before.</p>
+<pre><code class="language-py">tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
+pipeline = transformers.pipeline(
+    &quot;text-generation&quot;,              
+    model=model_name,            
+    torch_dtype=torch.float16,      
+    device_map=&quot;auto&quot;,
+)
+</code></pre>
+<p>Finally, we may sample the vocabulary of Llama 3.</p>
+<p>The <code>get_vocab</code> method of the <code>tokenizer</code> class returns a dictionary whose keys are the tokens themselves, and whose values are the token IDs (integer indices unique to each token). Because this method returns a dictionary, we assign <code>vocab</code> to be a list of its keys, then sample 12 items from this list.</p>
+<p>We also print the EOS token and its token ID, as well as the length of the vocabulary of Llama 3.</p>
+<pre><code class="language-py">vocab = list(tokenizer.get_vocab())
+sample_tokens = random.sample(vocab, 12)
+
+print(sample_tokens)
+print(tokenizer.eos_token, tokenizer.eos_token_id)
+print(len(vocab))
+</code></pre>
+<p>Although we provide an example above, here is another example output:</p>
+<pre><code>['Ġecosystems', '.registry', &quot;'):Ċ&quot;, 'Ġlip', 'Ġmon', 'getActiveSheet', '_log', 'ĠScout', ').[', 'ÏĦÎ¿Ïħ']
+&lt;|eot_id|&gt; 128009
+128256
+</code></pre>
+<h2 id="references">References</h2>
+<h3 id="source-code">Source Code</h3>
+<p><a href="https://github.com/FluidNumerics/amd-ml-examples">Available on GitHub</a></p>
+<h3 id="papers">Papers</h3>
+<p><a href="https://arxiv.org/abs/1706.03762">Vaswani, Ashish. "Attention is all you need." arXiv preprint arXiv:1706.03762 (2017).</a></p>
+<h3 id="installation-pages">Installation Pages</h3>
+<p><a href="https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/quick-start.html">ROCm quick start installation guide</a></p>
+<p><a href="https://docs.anaconda.com/miniconda/#quick-command-line-install">Miniconda Quick Command Line Install</a></p>
+<p><a href="https://pytorch.org/get-started/locally/">PyTorch Installation Configurator</a></p>
+<p><a href="https://git-lfs.com/">git-lfs</a></p>
+<h2 id="find-fluid-numerics-online-at">Find Fluid Numerics online at:</h2>
+<ul>
+<li><a href="http://www.fluidnumerics.com">fluidnumerics.com</a>  </li>
+<li><a href="https://www.reddit.com/r/FluidNumerics/">Reddit</a>  </li>
+<li><a href="https://github.com/FluidNumerics">GitHub</a>  </li>
+<li><a href="https://www.youtube.com/@FluidNumerics">YouTube</a>  </li>
+<li><a href="https://www.linkedin.com/company/fluidnumerics">LinkedIn</a></li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../fine-tuning-llama-3/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Fine Tuning LLAMA 3 on AMD GPUs">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Fine Tuning LLAMA 3 on AMD GPUs
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../hip-performance-comparisons-amd-and-nvidia-gpus/" class="md-footer__link md-footer__link--next" aria-label="Next: HIP performance comparisons- AMD and Nvidia GPUs">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                HIP performance comparisons- AMD and Nvidia GPUs
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2017 - 2024 Fluid Numerics LLC
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.youtube.com/@FluidNumerics" target="_blank" rel="noopener" title="www.youtube.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.reddit.com/r/FluidNumerics/" target="_blank" rel="noopener" title="www.reddit.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M201.5 305.5c-13.8 0-24.9-11.1-24.9-24.6 0-13.8 11.1-24.9 24.9-24.9 13.6 0 24.6 11.1 24.6 24.9 0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4 0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7 0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9 0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5 0 52.6 59.2 95.2 132 95.2 73.1 0 132.3-42.6 132.3-95.2 0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6 0-2.2-2.2-6.1-2.2-8.3 0-2.5 2.5-2.5 6.4 0 8.6 22.8 22.8 87.3 22.8 110.2 0 2.5-2.2 2.5-6.1 0-8.6-2.2-2.2-6.1-2.2-8.3 0zm7.7-75c-13.6 0-24.6 11.1-24.6 24.9 0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.1 24.9-24.6 0-13.8-11-24.9-24.9-24.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/fluidnumerics" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/company/fluidnumerics" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.instagram.com/fluidnumerics/" target="_blank" rel="noopener" title="www.instagram.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.footer"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+    
+  </body>
+</html>
