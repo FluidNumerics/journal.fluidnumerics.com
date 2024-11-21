@@ -15,6 +15,7 @@ nav:
   - Home: README.md
   - Saving Energy in Quantum Chromodynamics Simulations: saving-energy-on-quantum-chromodynamics-simulations/README.md
   - EmPrism Mentored Sprint Report : emprism-mentored-sprint-report/README.md
+  - What is a mentored sprint: what-is-a-mentored-sprint/README.md
   - Fine Tuning LLAMA 3 on AMD GPUs: fine-tuning-llama-3/README.md
   - Getting started with LLAMA3 on AMD GPUs: getting-started-with-llama3/README.md
   - HIP performance comparisons- AMD and Nvidia GPUs: hip-performance-comparisons-amd-and-nvidia-gpus/README.md
