@@ -32,5 +32,6 @@ Our team at Fluid Numerics specializes in software porting and optimization serv
 
 Reach out to us to learn how our solutions can optimize your workloads, cut costs, and help your organization stay ahead in an increasingly competitive landscape.
 
+* [Learn about mentored sprints](../what-is-a-mentored-sprint/README.md)
 * [Read the full mentored sprint report here](../emprism-mentored-sprint-report/README.md)
 * [Contact us for a consultation](https://www.fluidnumerics.com/contact)
