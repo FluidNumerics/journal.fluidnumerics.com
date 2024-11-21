@@ -27,4 +27,5 @@ By the end of your sprint, you’ll not only see measurable improvements in your
 If you’re ready to make your software faster, more efficient, and better suited to your hardware, a Mentored Sprint is your first step. Let’s work together to tackle your challenges, unlock new opportunities, and deliver lasting impact. 
 
 * [Read the summary of the EmPRISM sprint here](../saving-energy-on-quantum-chromodynamics-simulations/README.md)
+* [Read the summary of the EXESS (Gordon Bell finalist) sprint here](../accelerating-science-with-optimization/README.md)
 * [Contact us today](https://www.fluidnumerics.com/contact) to learn how our Mentored Sprint service can help your team achieve its goals.

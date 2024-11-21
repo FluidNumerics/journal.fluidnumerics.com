@@ -2,6 +2,10 @@
 
 [Back to Fluid Numerics](https://www.fluidnumerics.com)
 
+## [Port, Optimize, and Scale on AMD Instinct GPUs with HotAisle](port-optimize-and-scale-with-hostaisle/README.md )
+![Hot Aisle Servers in Grand Rapids, Michigan](./port-optimize-and-scale-with-hostaisle/hotaisle.png){ align=left width="25%" }
+With unmatched performance for HPC and AI workloads, scaling on AMD MI300X hardware can transform your computational capabilities—but only if your software is optimized to take full advantage. Discover how Fluid Numerics and Hot Aisle can help you seamlessly port, optimize, and scale your applications to achieve breakthrough results.
+
 
 ## [Accelerating Science with GPU Software Optimization](accelerating-science-with-optimization/README.md)
 ![Perfetto trace profile example](exess-mentored-sprint-report/images/image1.png){ align=left width="25%" } 

@@ -14,6 +14,7 @@ docs_dir: docs
 nav:
   - Home: README.md
   - Blog Posts:
+    - Port, Optimize, and Scale on AMD Instinct GPUs:  port-optimize-and-scale-with-hostaisle/README.md
     - Saving Energy in Quantum Chromodynamics Simulations: saving-energy-on-quantum-chromodynamics-simulations/README.md
     - Accelerating Science with GPU software optimization: accelerating-science-with-optimization/README.md
     - What is a mentored sprint: what-is-a-mentored-sprint/README.md
